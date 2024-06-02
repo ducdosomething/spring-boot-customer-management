@@ -14,12 +14,20 @@
     <input th:type="hidden" name="id" th:field="*{id}">
     <table>
         <tr>
-            <td>First name:</td>
-            <td th:text="${customer.firstName}"></td>
+            <td>Name:</td>
+            <td th:text="${customer.name}"></td>
         </tr>
         <tr>
-            <td>Last name:</td>
-            <td th:text="${customer.lastName}"></td>
+            <td>Age:</td>
+            <td th:text="${customer.age}"></td>
+        </tr>
+        <tr>
+            <td>Gender:</td>
+            <td th:text="${customer.gender}"></td>
+        </tr>
+        <tr>
+            <td>Age:</td>
+            <td th:text="${customer.address}"></td>
         </tr>
         <tr>
             <td></td>

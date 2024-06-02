@@ -9,17 +9,22 @@
 <h1>Customers</h1>
 <table border="1">
     <tr>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Update</th>
-        <th>Delete</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Address</th>
+        <th>Action</th>
     </tr>
     <th:block th:each="customer : ${customers}">
         <tr>
-            <td th:text="${customer.firstName}"></td>
-            <td th:text="${customer.lastName}"></td>
-            <td><a th:href="@{/customers/update/__${customer.id}__ }">Update</a></td>
-            <td><a th:href="@{/customers/delete/__${customer.id}__ }">Delete</a></td>
+            <td th:text="${customer.name}"></td>
+            <td th:text="${customer.age}"></td>
+            <td th:text="${customer.gender}"></td>
+            <td th:text="${customer.address}"></td>
+            <td>
+                <a th:href="@{/customers/update/__${customer.id}__ }">Update</a>
+                <a th:href="@{/customers/delete/__${customer.id}__ }">Delete</a>
+            </td>
         </tr>
     </th:block>
 </table>
