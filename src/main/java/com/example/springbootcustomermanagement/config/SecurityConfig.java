@@ -31,6 +31,9 @@ public class SecurityConfig {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
+
     @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationTokenFilter();
@@ -51,16 +54,12 @@ public class SecurityConfig {
         return new CustomAccessDeniedHandler();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }
 
@@ -70,17 +69,17 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                                .requestMatchers("/api/auth/login**").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/api/customers**").authenticated()
+//                                .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/customers/**").hasAnyAuthority("ROLE_ADMIN")
 //                        .requestMatchers("/api/customers**").hasAnyAuthority("ROLE_ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"/api/customers**").hasAnyAuthority("ROLE_ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/api/customers/**").hasAnyAuthority("ROLE_ADMIN")
                                 .requestMatchers(HttpMethod.POST,"/api/customers**").hasAnyAuthority("ROLE_ADMIN")
-                                .requestMatchers(HttpMethod.DELETE,"/api/customers**").hasAnyAuthority("ROLE_ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/api/customers/**").hasAnyAuthority("ROLE_ADMIN")
                 )
                 .exceptionHandling(customizer -> customizer.accessDeniedHandler(customAccessDeniedHandler()))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 }
